@@ -88,6 +88,26 @@ def quick_sort_func(L: list) -> list:
     return _quick_sort_func(L)
 
 
+def quick_sort2(nums):
+   if len(nums) <= 1:
+       return nums
+   else:
+       q = random.choice(nums)
+       s_nums = []
+       m_nums = []
+       e_nums = []
+       for n in nums:
+           if n < q:
+               s_nums.append(n)
+           elif n > q:
+               m_nums.append(n)
+           else:
+               e_nums.append(n)
+       return quick_sort2(s_nums) + e_nums + quick_sort2(m_nums)
+
+
+
+
 @time_of_function
 def quick_sort(L: list) -> list:
     fst = 0
@@ -111,6 +131,9 @@ def quick_sort(L: list) -> list:
 
     _quick_sort(L, fst, lst)
     return L
+
+
+
 
 
 @time_of_function
