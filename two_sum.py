@@ -20,8 +20,7 @@
 # •	Only one valid answer exists.
 # Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
 
-nums = [3, 3]
-target = 6
+from itertools import combinations
 
 
 def two_sum(nums: list, target: int):
@@ -50,4 +49,22 @@ def two_sum3(nums: list, target: int):
     return False
 
 
-print(two_sum(nums, target), two_sum2(nums, target), two_sum3(nums, target))
+def get_all_combinations(arr, qty, tgt):
+    return [tuple(arr.index(num) for num in nums) for nums in filter(lambda x: sum(x) == tgt, combinations(arr, qty))]
+
+
+tests = [
+    [1, 3, -2, 5, 0, 2, 7, 10],
+    [2, 1],
+]
+
+numbers_qty_ = 2
+target = 3
+
+for test in tests:
+    print(f'{test}, two_sum: {two_sum(test, target)}')
+    print(f'{test}, two_sum2: {two_sum2(test, target)}')
+    print(f'{test}, two_sum3: {two_sum3(test, target)}')
+    print(f'{test}, get_all_combinations: {get_all_combinations(test, numbers_qty_, target)}')
+    print()
+
