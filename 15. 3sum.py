@@ -19,10 +19,12 @@
 #
 # 0 <= nums.length <= 3000
 # -100000 <= nums[i] <= 100000
+import math
 from random import randint
 import time
 
 from itertools import combinations
+from typing import Callable
 
 
 def three_sum_1(nums: list) -> list:
@@ -398,45 +400,24 @@ def compare(ref: list, res: list):
     return ref == res
 
 
+def execute_test(func: Callable, test:list, max_len: int = math.inf):
+    if len(test[0]) <= max_len:
+        global reference
+        time_start = time.time()
+        result = func(test[0])
+        timedelta = time.time() - time_start
+        render_results(test, func.__name__, result, timedelta)
+        if not reference and result:
+            reference = result[::]
+
+
 for test in tests:
-
-    time_start = time.time()
-    result = three_sum_6(test[0])
-    timedelta = time.time() - time_start
-    render_results(test, 'three_sum_6', result, timedelta)
-    reference = result[::]
-
-    if len(test[0]) <= 1000:
-        time_start = time.time()
-        result = three_sum_4(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, 'three_sum_4', result, timedelta, compare(reference, result))
-
-        time_start = time.time()
-        result = three_sum_7(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, 'three_sum_7', result, timedelta, compare(reference, result))
-
-        time_start = time.time()
-        result = three_sum_5(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, 'three_sum_5', result, timedelta, compare(reference, result))
-
-    if len(test[0]) <= 500:
-        time_start = time.time()
-        result = three_sum_2(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, 'three_sum_2', result, timedelta, compare(reference, result))
-
-        time_start = time.time()
-        result = three_sum_1(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, 'three_sum_1', result, timedelta, compare(reference, result))
-
-    if len(test[0]) <= 100:
-        time_start = time.time()
-        result = three_sum_3(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, 'three_sum_3', result, timedelta, compare(reference, result))
-
+    reference = None
+    execute_test(three_sum_6, test)
+    execute_test(three_sum_4, test, 1000)
+    execute_test(three_sum_5, test, 1000)
+    execute_test(three_sum_7, test, 1000)
+    execute_test(three_sum_1, test, 500)
+    execute_test(three_sum_2, test, 500)
+    execute_test(three_sum_3, test, 100)
     print()
