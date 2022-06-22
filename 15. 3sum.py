@@ -406,7 +406,7 @@ def execute_test(func: Callable, test:list, max_len: int = math.inf):
         time_start = time.time()
         result = func(test[0])
         timedelta = time.time() - time_start
-        render_results(test, func.__name__, result, timedelta)
+        render_results(test, func.__name__, result, timedelta, compare(reference, result) if reference else True)
         if not reference and result:
             reference = result[::]
 
