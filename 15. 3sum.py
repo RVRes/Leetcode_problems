@@ -19,12 +19,10 @@
 #
 # 0 <= nums.length <= 3000
 # -100000 <= nums[i] <= 100000
-import math
 from random import randint
-import time
-
 from itertools import combinations
-from typing import Callable
+
+from _tasks_runner import execute
 
 
 def three_sum_1(nums: list) -> list:
@@ -368,56 +366,28 @@ test_leetcode_1 = [82597, -9243, 62390, 83030, -97960, -26521, -61011, 83390, -3
          -57876, 82874, 62481, -32754, -39902, 22451, -79095, -23904, 78409, -7418, 77916]
 
 tests = [
-    [[-1, 0, 1, 2, -1, -4], [[-1, -1, 2], [-1, 0, 1]]],
-    [[3, -2, 1, 0], []],
-    [[], []],
-    [[0], []],
-    [[randint(-2, 2) for _ in range(50)], []],
-    [[randint(-50, 0) for _ in range(100)], []],
-    [[randint(0, 50) for _ in range(100)], []],
-    [[randint(-100, 100) for _ in range(300)], []],
-    [[randint(-99999, 99999) for _ in range(500)], []],
-    [[randint(-99999, 99999) for _ in range(1000)], []],
-    [test_leetcode_1[:1500], []],
-    [test_leetcode_1, []],
+    [([-1, 0, 1, 2, -1, -4],), [[-1, -1, 2], [-1, 0, 1]]],
+    [([3, -2, 1, 0],), []],
+    [([],), []],
+    [([0],), []],
+    [([randint(-2, 2) for _ in range(50)],), []],
+    [([randint(-50, 0) for _ in range(100)],), []],
+    [([randint(0, 50) for _ in range(100)],), []],
+    [([randint(-100, 100) for _ in range(300)],), []],
+    [([randint(-99999, 99999) for _ in range(500)],), []],
+    [([randint(-99999, 99999) for _ in range(1000)],), []],
+    [(test_leetcode_1[:1500],), []],
+    [(test_leetcode_1,), []],
 ]
 
 
-def render_results(test, funcname, result, timedelta, equal=True):
-    N = 5
-    print(f'{round(timedelta, 2):4}s '
-          f'\033[32m{"OK" if equal else ""}\033[39m'
-          f'\033[31m{"ER" if not equal else ""}\033[39m'
-          f' {funcname}. Tests:{len(test[0])} '
-          f' {sorted(test[0])[:N]}, '
-          f'answ:{test[1]}, '
-          f'res:{len(result)} {sorted(list(result))[:N]}')
-
-
-def compare(ref: list, res: list):
-    ref = sorted([sorted(tuple(i)) for i in ref])
-    res = sorted([sorted(tuple(i)) for i in res])
-    return ref == res
-
-
-def execute_test(func: Callable, test:list, max_len: int = math.inf):
-    if len(test[0]) <= max_len:
-        global reference
-        time_start = time.time()
-        result = func(test[0])
-        timedelta = time.time() - time_start
-        render_results(test, func.__name__, result, timedelta, compare(reference, result) if reference else True)
-        if not reference and result:
-            reference = result[::]
-
-
-for test in tests:
-    reference = None
-    execute_test(three_sum_6, test)
-    execute_test(three_sum_4, test, 1000)
-    execute_test(three_sum_5, test, 1000)
-    execute_test(three_sum_7, test, 1000)
-    execute_test(three_sum_1, test, 500)
-    execute_test(three_sum_2, test, 500)
-    execute_test(three_sum_3, test, 100)
+for i, test in enumerate(tests):
+    print(f'Test {i}, length {len(test[0][0])}:')
+    execute(three_sum_6, test[0], test[1], is_reference=True)
+    execute(three_sum_4, test[0], test[1], include_func=lambda x: len(x[0]) <= 1000)
+    execute(three_sum_5, test[0], test[1], include_func=lambda x: len(x[0]) <= 1000)
+    execute(three_sum_7, test[0], test[1], include_func=lambda x: len(x[0]) <= 1000)
+    execute(three_sum_1, test[0], test[1], include_func=lambda x: len(x[0]) <= 500)
+    execute(three_sum_2, test[0], test[1], include_func=lambda x: len(x[0]) <= 500)
+    execute(three_sum_3, test[0], test[1], include_func=lambda x: len(x[0]) <= 100)
     print()
