@@ -19,10 +19,10 @@
 # 3 <= nums.length <= 1000
 # -1000 <= nums[i] <= 1000
 # -104 <= target <= 104
-from typing import List, Callable
-import time
+from typing import List
 from itertools import combinations
 from random import randint
+from _tasks_runner import execute
 
 
 def three_sum_closest_1(nums: List[int], target: int) -> int:
@@ -142,14 +142,6 @@ def three_sum_closest_5(nums: List[int], target: int) -> int:
     return ans
 
 
-def execute(func: Callable, test_, answer):
-    time_start = time.time()
-    result = func(*test_)
-    time_delta = time.time() - time_start
-    print(f'{round(time_delta, 2):4}s {"OK" if result == answer or answer is None else "ER"}'
-          f' {func.__name__} tgt: {test_[1]} out:{result} inp:{test}')
-
-
 lc_tst1 = [665, 366, 479, -347, 134, 825, -109, 302, -623, -396, 855, 383, 89, -586, 754, -183, 862, 283, -238, 793,
            221, -507, -27, 64, 8, 201, -509, 33, 611, -813, 990, 161, 380, 408, -307, -571, 432, -697, -893, 720, -127,
            439, 127, 849, -199, 498, 245, 878, 607, 40, -2, 976, -381, -428, -159, -369, 75, -879, -715, 962, -37, -478,
@@ -206,10 +198,11 @@ TESTS = [
     (([randint(-1000, 1000) for _ in range(10000)], randint(-10000, 10000)), None),
 ]
 
-for test in TESTS:
-    # execute(three_sum_closest_1, test[0], test[1])
-    execute(three_sum_closest_2, test[0], test[1])
-    execute(three_sum_closest_3, test[0], test[1])
-    execute(three_sum_closest_4, test[0], test[1])
-    execute(three_sum_closest_5, test[0], test[1])
+for i, test in enumerate(TESTS):
+    print(f'Test {i}, length {len(test[0][0])}:')
+    execute(three_sum_closest_5, test[0], test[1], is_reference=True)
+    execute(three_sum_closest_1, test[0], test[1], include_func=lambda x: len(x[0]) <= 100)
+    execute(three_sum_closest_2, test[0], test[1], include_func=lambda x: len(x[0]) <= 10000)
+    execute(three_sum_closest_3, test[0], test[1], include_func=lambda x: len(x[0]) <= 10000)
+    execute(three_sum_closest_4, test[0], test[1], include_func=lambda x: len(x[0]) <= 10000)
     print()
