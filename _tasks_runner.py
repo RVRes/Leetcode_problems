@@ -1,5 +1,6 @@
 """
-Helper module that counts functions execution time, compare results from different executions or with answer,
+Helper module that counts functions execution time,
+compare results from different executions or with answer,
 filter tests that meet the criteria and show the execution results.
 """
 import time
@@ -23,7 +24,8 @@ class Style:
     GREY = '\033[90m'
 
 
-def __render(test, func_name, result, reference, timedelta, equal=True, skipped=False):
+def __render(test, func_name, result, reference, timedelta, equal=True,
+             skipped=False):
     def shrink(value):
         max_len = 20
         sorted_types = [list, tuple, set, range]
@@ -58,7 +60,8 @@ def __compare(reference: Any, result: Any) -> bool:
     if reference == result:
         return True
     sorted_types = [list, tuple, range, set]
-    if type(reference) in sorted_types and type(result) in sorted_types and len(reference) == len(result):
+    if type(reference) in sorted_types and type(result) in sorted_types and len(
+            reference) == len(result):
         reference = deepcopy(reference)
         result = deepcopy(result)
         try:
@@ -66,7 +69,8 @@ def __compare(reference: Any, result: Any) -> bool:
                 reference = list(reference)
             if type(result) is set:
                 result = list(result)
-            if type(reference[0]) in sorted_types and type(result[0]) in sorted_types:
+            if type(reference[0]) in sorted_types and type(
+                    result[0]) in sorted_types:
                 reference = [sorted(i) for i in reference]
                 result = [sorted(i) for i in result]
         except (TypeError, IndexError):
@@ -88,15 +92,16 @@ def execute(
         include_func: Optional[Callable] = None,
         is_reference: bool = False):
     """
-    Executes function, if include function not specified or its result with test argument is True.
-    Stores result as a reference for other invocations if is_reference = True.
-    Compares result with reference if is_reference not specified.
-    Prints result to command line.
+    Executes function, if include function not specified or its result with test
+    argument is True. Stores result as a reference for other invocations
+    if is_reference = True. Compares result with reference if is_reference
+    is not specified. Prints result to command line.
     Args:
         func: function (leetcode problem solution) to execute.
         test: list of arguments for given function.
         reference: you can specify reference to compare for execution
-        include_func: boolean function that returns result from test argument (to skip functions with long run times)
+        include_func: boolean function that returns result from test argument
+                      (to skip functions with long run times)
         is_reference: saving result as reference for other invocations if True
     """
     if not include_func or include_func(test):
@@ -106,7 +111,9 @@ def execute(
         timedelta = time.time() - time_start
         if is_reference:
             __reference = reference if reference else deepcopy(result)
-        is_results_equal = __compare(reference if reference else __reference, result)
-        __render(test, func.__name__, result, __reference, timedelta, is_results_equal)
+        is_results_equal = __compare(reference if reference else __reference,
+                                     result)
+        __render(test, func.__name__, result, __reference, timedelta,
+                 is_results_equal)
     else:
         __render(test, func.__name__, None, None, None, False, skipped=True)
